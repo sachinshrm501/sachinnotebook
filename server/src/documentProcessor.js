@@ -1,5 +1,5 @@
 import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
-import { OpenAIEmbeddings } from '@langchain/openai';
+import OpenAIService from './services/openaiService.js';
 import { QdrantVectorStore } from '@langchain/qdrant';
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
 import fetch from 'node-fetch';
@@ -10,9 +10,7 @@ import os from 'os';
 
 class DocumentProcessor {
     constructor() {
-        this.embeddings = new OpenAIEmbeddings({ 
-            model: "text-embedding-3-large" 
-        });
+        this.openaiService = new OpenAIService();
         
         this.splitter = new RecursiveCharacterTextSplitter({ 
             chunkSize: 1000, 
@@ -298,7 +296,7 @@ class DocumentProcessor {
             console.log(`🔍 Metadata preview:`, JSON.stringify(docsWithMetadata[0]?.metadata, null, 2));
 
             // Create or get the vector store
-            const vectorStore = new QdrantVectorStore(this.embeddings, {
+            const vectorStore = new QdrantVectorStore(this.openaiService.embeddings, {
                 collectionName: 'sachinllm',
                 url: process.env.QDRANT_URL,
             });
@@ -340,7 +338,7 @@ class DocumentProcessor {
         try {
             console.log(`🔍 Searching vector store for: "${query}" (limit: ${limit})`);
             
-            const vectorStore = new QdrantVectorStore(this.embeddings, {
+            const vectorStore = new QdrantVectorStore(this.openaiService.embeddings, {
                 collectionName: 'sachinllm',
                 url: process.env.QDRANT_URL,
             });
@@ -427,7 +425,7 @@ class DocumentProcessor {
 
     async getCollectionInfo() {
         try {
-            const vectorStore = new QdrantVectorStore(this.embeddings, {
+            const vectorStore = new QdrantVectorStore(this.openaiService.embeddings, {
                 collectionName: 'sachinllm',
                 url: process.env.QDRANT_URL,
             });

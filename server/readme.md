@@ -7,7 +7,7 @@ A powerful AI-powered knowledge management system that combines document process
 - **📄 Document Processing**: PDF, CSV, Word documents, and text files
 - **🌐 Website Analysis**: Extract and analyze web content
 - **📺 YouTube Processing**: Analyze video transcripts and descriptions
-- **🧠 AI-Powered Responses**: Gemini Flash (Free) for intelligent answers
+- **🧠 AI-Powered Responses**: OpenAI GPT models for intelligent answers
 - **🔍 Vector Search**: OpenAI embeddings with Qdrant vector database
 - **💬 Conversation Memory**: Maintains context across questions
 - **📱 Mobile Responsive**: Optimized for all devices
@@ -15,7 +15,7 @@ A powerful AI-powered knowledge management system that combines document process
 ## 🏗️ Architecture
 
 ```
-User Upload → Text Extraction → OpenAI Embeddings → Qdrant Vector Store → Gemini Flash AI → Response
+User Upload → Text Extraction → OpenAI Embeddings → Qdrant Vector Store → OpenAI GPT → Response
 ```
 
 ## 🚀 Quick Start
@@ -31,7 +31,7 @@ User Upload → Text Extraction → OpenAI Embeddings → Qdrant Vector Store �
    PORT=3000
    QDRANT_URL=http://localhost:6333
    OPENAI_API_KEY=your_openai_api_key_here
-   GEMINI_API_KEY=your_gemini_api_key_here
+   OPENAI_API_KEY=your_openai_api_key_here
    ```
 
 3. **Start Qdrant Database**
@@ -53,22 +53,20 @@ User Upload → Text Extraction → OpenAI Embeddings → Qdrant Vector Store �
 - `POST /api/text` - Process text content
 - `POST /api/chat` - Chat with AI about your documents
 
-### Gemini AI Endpoints
-- `GET /api/gemini/status` - Check Gemini service status
-- `POST /api/gemini/summarize` - Summarize content
-- `POST /api/gemini/analyze` - Analyze content
-- `POST /api/gemini/enhance-query` - Enhance search queries
+### OpenAI AI Endpoints
+- `POST /api/chat` - Chat with AI using uploaded documents
+- `GET /api/health` - Check system health including OpenAI status
 
 ## 💡 AI Models Used
 
 - **OpenAI Embeddings**: `text-embedding-3-large` for vector search
-- **Gemini Flash**: Free AI model for response generation
+- **OpenAI GPT**: Advanced AI model for response generation
 - **Qdrant**: Vector database for similarity search
 
 ## 🎯 Benefits
 
 - **⚡ Fast**: Sub-second response times
-- **💰 Free**: Gemini Flash is completely free
+- **🚀 Advanced**: OpenAI GPT provides high-quality responses
 - **🛡️ Reliable**: Built-in fallback system
 - **📈 Scalable**: Handles unlimited documents and queries
 - **🔒 Secure**: Local vector storage with your data
@@ -79,7 +77,7 @@ User Upload → Text Extraction → OpenAI Embeddings → Qdrant Vector Store �
 server/
 ├── src/
 │   ├── handlers/          # File, website, YouTube handlers
-│   ├── services/          # Gemini AI service
+│   ├── services/          # OpenAI AI service
 │   ├── utils/             # Utility functions
 │   ├── documentProcessor.js # Document processing logic
 │   ├── personalAgent.js   # AI response generation

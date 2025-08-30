@@ -1,14 +1,10 @@
-import { OpenAIEmbeddings } from '@langchain/openai';
-import GeminiService from './services/geminiService.js';
+
+import OpenAIService from './services/openaiService.js';
 
 class PersonalAgent {
     constructor() {
-        this.embeddings = new OpenAIEmbeddings({ 
-            model: "text-embedding-3-large" 
-        });
-        
-        // Initialize Gemini service
-        this.geminiService = new GeminiService();
+        // Initialize OpenAI service
+        this.openaiService = new OpenAIService();
         
         // System prompt for focused responses
         this.SYSTEM_PROMPT = `You are an AI assistant that answers questions based on the provided context available to you from a PDF file with the content and page number.
@@ -22,19 +18,19 @@ Sort information by relevance - most important answer first, additional context 
 
     }
 
-    // Enhanced response generation with Gemini integration
+    // Enhanced response generation with OpenAI integration
     async generatePersonalizedResponse(query, searchResults, conversationContext) {
         try {
             if (searchResults && searchResults.length > 0) {
                 console.log(`🤖 Generating response for query: "${query}"`);
                 console.log(`📊 Processing ${searchResults.length} search results`);
                 
-                // Check if Gemini is available
-                if (this.geminiService.isAvailable()) {
-                    console.log(`✨ Using Gemini for response generation`);
-                    return await this.geminiService.generatePersonalizedResponse(query, searchResults, conversationContext);
+                // Check if OpenAI is available
+                if (this.openaiService.isAvailable()) {
+                    console.log(`✨ Using OpenAI for response generation`);
+                    return await this.openaiService.generatePersonalizedResponse(query, searchResults, conversationContext);
                 } else {
-                    console.log(`⚠️ Gemini not available, using fallback response generation`);
+                    console.log(`⚠️ OpenAI not available, using fallback response generation`);
                     return this.generateFallbackResponse(query, searchResults, conversationContext);
                 }
                 
@@ -44,7 +40,7 @@ Sort information by relevance - most important answer first, additional context 
         } catch (error) {
             console.error("❌ Error generating response:", error);
             
-            // Fallback to basic response if Gemini fails
+            // Fallback to basic response if OpenAI fails
             if (searchResults && searchResults.length > 0) {
                 return this.generateFallbackResponse(query, searchResults, conversationContext);
             }
@@ -53,7 +49,7 @@ Sort information by relevance - most important answer first, additional context 
         }
     }
 
-    // Fallback response generation when Gemini is not available
+    // Fallback response generation when OpenAI is not available
     generateFallbackResponse(query, searchResults, conversationContext) {
         console.log("🔄 Using fallback response generation");
         
@@ -178,9 +174,6 @@ Sort information by relevance - most important answer first, additional context 
     combineMultipleResults(results, query) {
         if (results.length === 1) return this.formatSingleResult(results[0], query);
         
-        // Group results by source type for better organization
-        const groupedResults = this.groupResultsBySource(results);
-        
         let response = "Based on your query, here's what I found:\n\n";
         
         // Start with the most relevant result
@@ -192,7 +185,6 @@ Sort information by relevance - most important answer first, additional context 
             response += "📚 **Additional Information:**\n\n";
             
             results.slice(1).forEach((result, index) => {
-                const source = result.metadata?.sourceType || 'document';
                 const filename = result.metadata?.filename || 'unknown';
                 
                 response += `${index + 1}. ${result.pageContent}\n`;
@@ -223,31 +215,7 @@ Sort information by relevance - most important answer first, additional context 
         return false;
     }
 
-    // Validate response against system prompt rules
-    validateResponse(response, query, searchResults) {
-        const issues = [];
-        
-        // Check if response is based on available context
-        if (searchResults && searchResults.length === 0 && !response.includes("don't have")) {
-            issues.push("Response provided without available context");
-        }
-        
-        // Check if source attribution is included
-        if (searchResults && searchResults.length > 0 && !response.includes("📁 Source:")) {
-            issues.push("Missing source attribution");
-        }
-        
-        // Check if response is too verbose (more than 1000 characters)
-        if (response.length > 1000) {
-            issues.push("Response may be too verbose");
-        }
-        
-        return {
-            isValid: issues.length === 0,
-            issues,
-            suggestions: issues.length > 0 ? "Consider making response more concise and ensuring source attribution" : "Response follows system prompt rules"
-        };
-    }
+
 
     // Calculate similarity between two text strings
     calculateSimilarity(text1, text2) {

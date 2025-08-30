@@ -58,9 +58,9 @@ JWT_SECRET=your-super-secret-jwt-key
 
 ### 3. Start Services
 ```bash
-# Start databases with Docker
+# Start MongoDB with Docker (Qdrant is cloud-hosted)
 cd server
-docker-compose up -d
+docker-compose up -d mongodb mongo-express
 
 # Install dependencies
 cd ../server && npm install
@@ -109,7 +109,7 @@ server/
 
 ### **Database Layer**
 - **MongoDB**: User management and data storage
-- **Qdrant**: Vector database for semantic search
+- **Qdrant Cloud**: Vector database for semantic search (hosted on GCP)
 - **Redis**: Caching and session management (optional)
 
 ## 🔧 Configuration
@@ -124,6 +124,10 @@ NODE_ENV=development
 
 # Database
 MONGODB_URI=mongodb://localhost:27017/sachinnotebook
+
+# Qdrant Cloud (Vector Database)
+QDRANT_URL=https://98c25d90-5c66-4fdd-925f-8d24fdd3cd9c.us-east4-0.gcp.cloud.qdrant.io:6333
+QDRANT_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.xJNoV76WVjdv2IVt4RamzcQSZ3GmvVyYMCHkBfhlZ3c
 
 # AI Services
 GEMINI_API_KEY=your_gemini_api_key

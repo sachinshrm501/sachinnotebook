@@ -118,11 +118,11 @@ Body:
 }
 ```
 
-### 🧠 Gemini AI Features
+### 🧠 OpenAI AI Features
 
 #### Service Status
 ```http
-GET /api/gemini/status
+GET /api/health
 ```
 
 **Response:**
@@ -130,82 +130,17 @@ GET /api/gemini/status
 {
   "available": true,
   "model": {
-    "type": "free",
-    "name": "gemini-1.5-flash",
-    "isPro": false,
-    "description": "Fast and free Gemini model"
+    "type": "openai",
+    "name": "gpt-4o-mini",
+    "isPro": true,
+    "description": "Advanced OpenAI GPT model"
   },
   "apiKeyConfigured": true,
   "safetySettings": 4
 }
 ```
 
-#### Content Summarization
-```http
-POST /api/gemini/summarize
-Content-Type: application/json
 
-Body:
-{
-  "content": "Long content to summarize...",
-  "maxLength": 200
-}
-```
-
-**Response:**
-```json
-{
-  "summary": "Condensed summary of the content...",
-  "originalLength": 1500,
-  "summaryLength": 180
-}
-```
-
-#### Content Analysis
-```http
-POST /api/gemini/analyze
-Content-Type: application/json
-
-Body:
-{
-  "content": "Content to analyze..."
-}
-```
-
-**Response:**
-```json
-{
-  "topics": ["AI", "Machine Learning"],
-  "contentType": "technical",
-  "readingLevel": "intermediate",
-  "keyEntities": ["OpenAI", "GPT"],
-  "mainThemes": ["Artificial Intelligence"],
-  "summary": "Brief analysis summary",
-  "estimatedReadingTime": "5 minutes"
-}
-```
-
-#### Query Enhancement
-```http
-POST /api/gemini/enhance-query
-Content-Type: application/json
-
-Body:
-{
-  "query": "What is AI?"
-}
-```
-
-**Response:**
-```json
-{
-  "enhancedQuery": "What is artificial intelligence and how does it work?",
-  "relatedTerms": ["machine learning", "neural networks"],
-  "queryIntent": "factual",
-  "searchStrategy": "semantic",
-  "suggestedFilters": ["technology", "computer science"]
-}
-```
 
 ### 🔍 System Information
 
@@ -277,7 +212,7 @@ Body:
 - **Response Time**: 1-3 seconds for AI responses
 - **File Processing**: 2-10 seconds depending on file size
 - **Vector Search**: 100-500ms for similarity search
-- **AI Generation**: 800ms-2 seconds with Gemini Flash
+- **AI Generation**: 1-3 seconds with OpenAI GPT
 
 ## 💡 Best Practices
 

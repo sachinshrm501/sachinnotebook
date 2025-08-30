@@ -193,7 +193,7 @@ app.post("/api/chat", async (req, res) => {
         const conversationContext = memoryHandler.getRelevantContext(sessionId, message);
         
         // Search for relevant documents
-        const searchResults = await documentProcessor.searchDocuments(message, 5);
+        const searchResults = await documentProcessor.searchVectorStore(message, 5);
         
         // Generate personalized response
         const response = await personalAgent.generatePersonalizedResponse(message, searchResults, conversationContext);
@@ -217,84 +217,7 @@ app.post("/api/chat", async (req, res) => {
     }
 });
 
-// ============================================================================
-// GEMINI AI FEATURES ENDPOINTS
-// ============================================================================
 
-// Get Gemini service status
-app.get("/api/gemini/status", (req, res) => {
-    try {
-        const status = personalAgent.geminiService.getStatus();
-        res.json(status);
-    } catch (error) {
-        res.status(500).json({ error: "Failed to get Gemini status", details: error.message });
-    }
-});
-
-// Content summarization with Gemini
-app.post("/api/gemini/summarize", async (req, res) => {
-    try {
-        const { content, maxLength = 200 } = req.body;
-        
-        if (!content) {
-            return res.status(400).json({ error: "Content is required" });
-        }
-
-        const summary = await personalAgent.geminiService.summarizeContent(content, maxLength);
-        
-        res.json({
-            success: true,
-            summary: summary,
-            originalLength: content.length,
-            summaryLength: summary.length
-        });
-    } catch (error) {
-        console.error("Error summarizing content:", error);
-        res.status(500).json({ error: "Failed to summarize content", details: error.message });
-    }
-});
-
-// Content analysis with Gemini
-app.post("/api/gemini/analyze", async (req, res) => {
-    try {
-        const { content } = req.body;
-        
-        if (!content) {
-            return res.status(400).json({ error: "Content is required" });
-        }
-
-        const analysis = await personalAgent.geminiService.analyzeContent(content);
-        
-        res.json({
-            success: true,
-            analysis: analysis
-        });
-    } catch (error) {
-        console.error("Error analyzing content:", error);
-        res.status(500).json({ error: "Failed to analyze content", details: error.message });
-    }
-});
-
-// Query enhancement with Gemini
-app.post("/api/gemini/enhance-query", async (req, res) => {
-    try {
-        const { query } = req.body;
-        
-        if (!query) {
-            return res.status(400).json({ error: "Query is required" });
-        }
-
-        const enhancedQuery = await personalAgent.geminiService.enhanceQuery(query);
-        
-        res.json({
-            success: true,
-            enhancedQuery: enhancedQuery
-        });
-    } catch (error) {
-        console.error("Error enhancing query:", error);
-        res.status(500).json({ error: "Failed to enhance query", details: error.message });
-    }
-});
 
 // ============================================================================
 // SYSTEM ENDPOINTS
@@ -319,7 +242,7 @@ app.put("/api/system/prompt", (req, res) => {
             return res.status(400).json({ error: "Prompt is required" });
         }
 
-        personalAgent.setSystemPrompt(prompt);
+        personalAgent.updateSystemPrompt(prompt);
         
         res.json({ 
             success: true, 
@@ -334,14 +257,12 @@ app.put("/api/system/prompt", (req, res) => {
 app.get("/api/health", async (req, res) => {
     try {
         const dbHealth = await databaseService.healthCheck();
-        const geminiStatus = personalAgent.geminiService.getStatus();
-        
         res.json({
             status: "healthy",
             timestamp: new Date().toISOString(),
             services: {
                 database: dbHealth,
-                gemini: geminiStatus,
+                openai: "configured",
                 server: "running"
             }
         });
@@ -385,7 +306,7 @@ app.listen(PORT, () => {
     console.log(`🚀 SachinNotebook Server running on port ${PORT}`);
     console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
     console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
-    console.log(`🧠 Gemini status: http://localhost:${PORT}/api/gemini/status`);
+    console.log(`🤖 OpenAI service: configured`);
 });
 
 // Graceful shutdown

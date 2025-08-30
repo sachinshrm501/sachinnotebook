@@ -121,16 +121,7 @@ class FileHandler {
         }
     }
 
-    // Get file processing statistics
-    getFileStats() {
-        return {
-            supportedTypes: this.supportedTypes,
-            maxFileSize: '10MB',
-            maxFiles: 5,
-            supportedExtensions: ['.pdf', '.txt', '.csv', '.docx', '.doc'],
 
-        };
-    }
 }
 
 export default FileHandler;
