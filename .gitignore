@@ -1,0 +1,102 @@
+# Root level .gitignore for SachinNotebook project
+
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+*.lcov
+.nyc_output
+
+# Build outputs
+dist/
+build/
+out/
+*/dist/
+*/build/
+*/out/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary folders
+tmp/
+temp/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Upload directories
+uploads/
+*/uploads/
+public/uploads/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.vite/
+
+# Docker volumes
+docker-volumes/
+
+# PM2 logs
+.pm2/
+
+# Test files (uncomment if you want to keep them)
+# !test/
+# !**/*.test.js
+# !**/*.spec.js
+
+# Documentation files (keep these)
+!README.md
+!*.md
+!docs/
+
+# Configuration files (keep these)
+!package.json
+!package-lock.json
+!*.config.js
+!*.config.ts
+!tailwind.config.js
+!vite.config.js
+!docker-compose.yml
+
+# Source code (keep these)
+!src/
+!public/
+!client/src/
+!server/src/
